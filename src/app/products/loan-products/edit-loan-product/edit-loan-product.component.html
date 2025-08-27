@@ -1,5 +1,11 @@
 <div class="container">
-  <mat-horizontal-stepper class="mat-elevation-z8" labelPosition="bottom" #loanProductStepper>
+  <mat-stepper
+    orientation="vertical"
+    [linear]="false"
+    class="mat-elevation-z8"
+    labelPosition="bottom"
+    #loanProductStepper
+  >
     <ng-template matStepperIcon="number">
       <fa-icon icon="pencil-alt" size="sm"></fa-icon>
     </ng-template>
@@ -104,7 +110,6 @@
         [buyDownFeeCalculationTypeOptions]="loanProductAndTemplate.buyDownFeeCalculationTypeOptions"
         [buyDownFeeStrategyOptions]="loanProductAndTemplate.buyDownFeeStrategyOptions"
         [buyDownFeeIncomeTypeOptions]="loanProductAndTemplate.buyDownFeeIncomeTypeOptions"
-        (setDeferredIncomeRecognition)="setDeferredIncomeRecognition($event)"
         (setViewChildForm)="setViewChildForm($event)"
       >
       </mifosx-loan-product-capitalized-income-step>
@@ -135,5 +140,5 @@
       >
       </mifosx-loan-product-preview-step>
     </mat-step>
-  </mat-horizontal-stepper>
+  </mat-stepper>
 </div>

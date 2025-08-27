@@ -29,7 +29,12 @@ export class LoansService {
   }
 
   getLoanActionTemplate(loanId: string, command: string): Observable<any> {
-    const httpParams = new HttpParams().set('command', command);
+    let httpParams = new HttpParams().set('command', command);
+    // Add associations for specific commands that need delinquency data
+    if (command === 'disburse' || command === 'disbursetosavings') {
+      httpParams = httpParams.set('associations', 'delinquency');
+    }
+
     return this.http.get(`/loans/${loanId}/transactions/template`, { params: httpParams });
   }
 
@@ -92,12 +97,30 @@ export class LoansService {
     return this.http.get(`/loans/${loanId}`, { params: httpParams });
   }
 
+  /**
+   * Get Loan Delinquency Data for template usage
+   * @param {string} loanId Loan Id
+   * @returns {Observable<any>}
+   */
+  getLoanDelinquencyDataForTemplate(loanId: string): Observable<any> {
+    const httpParams = new HttpParams().set('associations', 'delinquency');
+    return this.http.get(`/loans/${loanId}`, { params: httpParams });
+  }
+
   getDelinquencyActions(loanId: string) {
     return this.http.get(`/loans/${loanId}/delinquency-actions`);
   }
 
   createDelinquencyActions(loanId: string, delinquencyActions: any) {
     return this.http.post(`/loans/${loanId}/delinquency-actions`, delinquencyActions);
+  }
+
+  getDeferredIncomeData(loanId: string) {
+    return this.http.get(`/loans/${loanId}/deferredincome`);
+  }
+
+  getBuyDownFeeData(loanId: string): Observable<any> {
+    return this.http.get(`/loans/${loanId}/buydown-fees`);
   }
 
   /**
@@ -461,7 +484,7 @@ export class LoansService {
    * @returns {Observable<any>}
    */
   getLoanApprovalTemplate(loanId: string): Observable<any> {
-    const httpParams = new HttpParams().set('templateType', 'approval');
+    const httpParams = new HttpParams().set('templateType', 'approval').set('associations', 'delinquency');
     return this.http.get(`/loans/${loanId}/template`, { params: httpParams });
   }
 
